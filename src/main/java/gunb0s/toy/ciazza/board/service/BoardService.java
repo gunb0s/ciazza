@@ -25,7 +25,7 @@ public class BoardService {
 			throw new IllegalArgumentException("Educator not found");
 		}
 		Lecture lecture = lectureRepository.findById(createBoardDto.getLectureId()).orElseThrow();
-		if (lecture.getId() != createBoardDto.getEducatorId()) {
+		if (!lecture.getEducator().getId().equals(createBoardDto.getEducatorId())) {
 			throw new IllegalArgumentException("Educator and lecture do not match");
 		}
 
