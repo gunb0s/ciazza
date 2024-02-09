@@ -1,0 +1,9 @@
+### Create Comment
+POST http://localhost:8080/comment
+Content-Type: application/json
+
+{
+  "content": "hello content",
+  "userId": 2,
+  "postId": 102
+}

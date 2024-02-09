@@ -11,13 +11,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 	@Id
 	@GeneratedValue
@@ -40,4 +44,11 @@ public class Comment extends BaseEntity {
 
 	@OneToMany(mappedBy = "parentComment")
 	private List<Comment> childComments = new ArrayList<>();
+
+	@Builder
+	public Comment(String content, Post post, User user) {
+		this.content = content;
+		this.post = post;
+		this.user = user;
+	}
 }
