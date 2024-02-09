@@ -10,10 +10,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(
+		uniqueConstraints = {
+				@UniqueConstraint(
+						name = "uk_enrollment_user_lecture",
+						columnNames = {"user_id", "lecture_id"}
+				)
+		}
+)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Enrollment extends BaseEntity {
 	@Id
 	@GeneratedValue
@@ -22,9 +36,15 @@ public class Enrollment extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
-	private Student user;
+	private Student student;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lecture_id")
 	private Lecture lecture;
+
+	@Builder
+	public Enrollment(Student student, Lecture lecture) {
+		this.student = student;
+		this.lecture = lecture;
+	}
 }

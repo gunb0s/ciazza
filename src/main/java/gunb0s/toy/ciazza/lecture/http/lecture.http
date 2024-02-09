@@ -8,3 +8,11 @@ Content-Type: application/json
   "educatorId": 1,
   "semester": "SPRING_2024"
 }
+
+### Enroll Lecture
+POST http://localhost:8080/lecture/1
+Content-Type: application/json
+
+{
+  "studentId": 1
+}
