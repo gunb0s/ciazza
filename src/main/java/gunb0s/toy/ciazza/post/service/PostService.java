@@ -2,18 +2,19 @@ package gunb0s.toy.ciazza.post.service;
 
 import gunb0s.toy.ciazza.board.entity.Board;
 import gunb0s.toy.ciazza.board.repository.BoardRepository;
-import gunb0s.toy.ciazza.enrollment.entity.Enrollment;
 import gunb0s.toy.ciazza.enrollment.repository.EnrollmentRepository;
 import gunb0s.toy.ciazza.lecture.entity.Lecture;
 import gunb0s.toy.ciazza.lecture.repository.LectureRepository;
 import gunb0s.toy.ciazza.post.controller.dto.CreatePostDto;
 import gunb0s.toy.ciazza.post.entity.Post;
 import gunb0s.toy.ciazza.post.repository.PostRepository;
+import gunb0s.toy.ciazza.user.entity.Educator;
+import gunb0s.toy.ciazza.user.entity.Student;
+import gunb0s.toy.ciazza.user.entity.User;
+import gunb0s.toy.ciazza.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,25 +24,30 @@ public class PostService {
 	private final BoardRepository boardRepository;
 	private final EnrollmentRepository enrollmentRepository;
 	private final LectureRepository lectureRepository;
+	private final UserRepository userRepository;
 
 	@Transactional
 	public Long create(CreatePostDto createPostDto) {
 		Long userId = createPostDto.getUserId();
 		Long lectureId = createPostDto.getLectureId();
 
-		Optional<Enrollment> enrollment = enrollmentRepository.findByStudentIdAndLectureId(userId, lectureId);
-		if (enrollment.isEmpty()) {
-			Optional<Lecture> lecture = lectureRepository.findByIdAndEducatorId(lectureId, userId);
-			if (lecture.isEmpty()) {
-				throw new IllegalArgumentException("You are not enrolled in this lecture.");
-			}
+		User user = userRepository.findById(userId).orElseThrow();
+		if (user.getDtype().equals("E")) {
+			lectureRepository.findByIdAndEducator(lectureId, (Educator) user).orElseThrow();
+		} else {
+			Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
+			enrollmentRepository.findByStudentAndLecture((Student) user, lecture).orElseThrow();
 		}
 
 		Board board = boardRepository.findById(createPostDto.getBoardId()).orElseThrow();
+		if (!board.getLecture().getId().equals(lectureId)) {
+			throw new IllegalArgumentException("The board does not belong to the lecture.");
+		}
 		Post post = Post.builder()
 				.title(createPostDto.getTitle())
 				.content(createPostDto.getContent())
 				.board(board)
+				.user(user)
 				.build();
 
 		postRepository.save(post);

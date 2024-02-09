@@ -28,6 +28,9 @@ public abstract class User extends BaseEntity {
 
 	private String name;
 
+	@Column(updatable = false, insertable = false)
+	private String dtype;
+
 	public User(String name) {
 		this.name = name;
 	}
