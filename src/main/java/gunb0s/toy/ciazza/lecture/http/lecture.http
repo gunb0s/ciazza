@@ -1,0 +1,10 @@
+### Create Lecture
+POST http://localhost:8080/lecture
+Content-Type: application/json
+
+{
+  "name": "Introduction to Java",
+  "lectureCode": "JAV101",
+  "educatorId": 1,
+  "semester": "SPRING_2024"
+}
