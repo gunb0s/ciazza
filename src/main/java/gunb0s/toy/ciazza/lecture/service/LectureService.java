@@ -3,6 +3,7 @@ package gunb0s.toy.ciazza.lecture.service;
 import gunb0s.toy.ciazza.enrollment.entity.Enrollment;
 import gunb0s.toy.ciazza.enrollment.repository.EnrollmentRepository;
 import gunb0s.toy.ciazza.lecture.controller.dto.CreateLectureDto;
+import gunb0s.toy.ciazza.lecture.controller.dto.EnrollLectureDto;
 import gunb0s.toy.ciazza.lecture.entity.Lecture;
 import gunb0s.toy.ciazza.lecture.repository.LectureRepository;
 import gunb0s.toy.ciazza.user.entity.Educator;
@@ -44,9 +45,9 @@ public class LectureService {
 	}
 
 	@Transactional
-	public Long enroll(Long lectureId, Long studentId) {
+	public Long enroll(Long lectureId, EnrollLectureDto enrollLectureDto) {
 		Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
-		Student student = studentRepository.findById(studentId).orElseThrow();
+		Student student = studentRepository.findById(enrollLectureDto.getStudentId()).orElseThrow();
 
 		Enrollment enrollment = Enrollment.builder()
 				.lecture(lecture)
