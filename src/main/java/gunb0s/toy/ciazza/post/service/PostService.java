@@ -24,11 +24,12 @@ public class PostService {
 	private final EnrollmentRepository enrollmentRepository;
 	private final LectureRepository lectureRepository;
 
+	@Transactional
 	public Long create(CreatePostDto createPostDto) {
 		Long userId = createPostDto.getUserId();
 		Long lectureId = createPostDto.getLectureId();
 
-		Optional<Enrollment> enrollment = enrollmentRepository.findByUserIdAndLectureId(userId, lectureId);
+		Optional<Enrollment> enrollment = enrollmentRepository.findByStudentIdAndLectureId(userId, lectureId);
 		if (enrollment.isEmpty()) {
 			Optional<Lecture> lecture = lectureRepository.findByIdAndEducatorId(lectureId, userId);
 			if (lecture.isEmpty()) {

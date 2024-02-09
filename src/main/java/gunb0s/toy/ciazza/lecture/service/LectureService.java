@@ -43,6 +43,7 @@ public class LectureService {
 		return lecture.getId();
 	}
 
+	@Transactional
 	public Long enroll(Long lectureId, Long studentId) {
 		Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
 		Student student = studentRepository.findById(studentId).orElseThrow();
