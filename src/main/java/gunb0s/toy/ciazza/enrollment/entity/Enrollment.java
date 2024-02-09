@@ -2,7 +2,7 @@ package gunb0s.toy.ciazza.enrollment.entity;
 
 import gunb0s.toy.ciazza.common.entity.BaseEntity;
 import gunb0s.toy.ciazza.lecture.entity.Lecture;
-import gunb0s.toy.ciazza.user.entity.User;
+import gunb0s.toy.ciazza.user.entity.Student;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +22,7 @@ public class Enrollment extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
-	private User user;
+	private Student user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lecture_id")

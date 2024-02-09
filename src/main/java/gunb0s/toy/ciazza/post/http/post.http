@@ -1,0 +1,11 @@
+### Create Educator
+POST http://localhost:8080/post
+Content-Type: application/json
+
+{
+  "title": "hello post",
+  "content": "hello content",
+  "boardId": 1,
+  "userId": 1,
+  "lectureId": 1
+}
