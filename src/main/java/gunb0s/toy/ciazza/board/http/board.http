@@ -1,0 +1,9 @@
+### Create Educator
+POST http://localhost:8080/board
+Content-Type: application/json
+
+{
+  "title": "previous exam",
+  "lectureId": 1,
+  "educatorId": 1
+}
