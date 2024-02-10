@@ -3,5 +3,12 @@ POST http://localhost:8080/educator
 Content-Type: application/json
 
 {
-  "name": "John Doe"
+  "name": "Lee sun ho"
 }
+
+### Get Educator List
+GET http://localhost:8080/educator
+
+### Get Educator
+GET http://localhost:8080/educator/1
+

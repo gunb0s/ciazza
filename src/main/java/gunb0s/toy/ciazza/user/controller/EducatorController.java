@@ -24,6 +24,12 @@ public class EducatorController {
 		return educatorService.create(createEducatorDto);
 	}
 
+	@GetMapping("/educator")
+	public Page<GetEducatorDto> getList(Pageable pageable) {
+		Page<Educator> educators = educatorService.getList(pageable);
+		return educators.map(GetEducatorDto::new);
+	}
+
 	@GetMapping("/educator/{id}")
 	public GetEducatorDto get(@PathVariable Long id) {
 		Educator educator = educatorService.get(id);
@@ -31,11 +37,5 @@ public class EducatorController {
 				.id(educator.getId())
 				.name(educator.getName())
 				.build();
-	}
-
-	@GetMapping("/educator")
-	public Page<GetEducatorDto> getList(Pageable pageable) {
-		Page<Educator> educators = educatorService.getList(pageable);
-		return educators.map(GetEducatorDto::new);
 	}
 }
