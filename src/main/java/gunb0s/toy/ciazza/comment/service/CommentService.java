@@ -41,7 +41,68 @@ public class CommentService {
 			enrollmentRepository.findByStudentAndLecture((Student) user, lecture).orElseThrow();
 		}
 
-		Comment comment = new Comment(createCommentDto.getContent(), post, user, parentComment);
+		if (parentComment == null) {
+			Comment comment = Comment.builder()
+					.content(createCommentDto.getContent())
+					.post(post)
+					.user(user)
+					.commentOrder(0)
+					.depth(0)
+					.commentGroupId(null)
+					.build();
+			Comment save = commentRepository.save(comment);
+			save.setCommentGroupId(save.getId());
+			return save.getId();
+		} else {
+			Integer parentCommentDepth = parentComment.getDepth();
+			if (parentCommentDepth == 0) {
+				Integer maxCommentOrder = commentRepository
+						.maxCommentOrderByCommentGroupId(parentComment.getCommentGroupId());
+				Comment comment = Comment.builder()
+						.content(createCommentDto.getContent())
+						.post(post)
+						.user(user)
+						.parentComment(parentComment)
+						.commentOrder(maxCommentOrder + 1)
+						.depth(parentCommentDepth + 1)
+						.commentGroupId(parentComment.getCommentGroupId())
+						.build();
+				return commentRepository.save(comment).getId();
+			} else {
+				Integer maxCommentOrder = commentRepository
+						.maxCommentOrderByCommentGroupIdAndParentComment(parentComment.getCommentGroupId(), parentComment);
+				System.out.println("maxCommentOrder = " + maxCommentOrder);
+				if (maxCommentOrder == null) {
+					commentRepository.updateCommentOrderWithinCommentGroup(parentComment.getCommentGroupId(), parentComment.getCommentOrder() + 1);
+					Comment comment = Comment.builder()
+							.content(createCommentDto.getContent())
+							.post(post)
+							.user(user)
+							.parentComment(parentComment)
+							.commentOrder(parentComment.getCommentOrder() + 1)
+							.depth(parentCommentDepth + 1)
+							.commentGroupId(parentComment.getCommentGroupId())
+							.build();
+
+					return commentRepository.save(comment).getId();
+				} else {
+					commentRepository.updateCommentOrderWithinCommentGroup(parentComment.getCommentGroupId(), maxCommentOrder + 1);
+					Comment comment = Comment.builder()
+							.content(createCommentDto.getContent())
+							.post(post)
+							.user(user)
+							.parentComment(parentComment)
+							.commentOrder(maxCommentOrder + 1)
+							.depth(parentCommentDepth + 1)
+							.commentGroupId(parentComment.getCommentGroupId())
+							.build();
+
+					return commentRepository.save(comment).getId();
+				}
+
+			}
+		}
+	}
 
 		commentRepository.save(comment);
 		return comment.getId();

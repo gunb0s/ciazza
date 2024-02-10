@@ -11,7 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostPersist;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,10 +46,33 @@ public class Comment extends BaseEntity {
 	@OneToMany(mappedBy = "parentComment")
 	private List<Comment> childComments = new ArrayList<>();
 
-	public Comment(String content, Post post, User user, Comment parentComment) {
+	@Column(name = "comment_group_id")
+	private Long commentGroupId;
+
+	@Column(name = "comment_order")
+	private Integer commentOrder;
+	
+	private Integer depth;
+
+	@Builder
+	public Comment(String content, Post post, User user, Comment parentComment, Long commentGroupId, Integer commentOrder, Integer depth) {
 		this.content = content;
 		this.post = post;
 		this.user = user;
 		this.parentComment = parentComment;
+		this.commentGroupId = commentGroupId;
+		this.commentOrder = commentOrder;
+		this.depth = depth;
+	}
+
+	public void setCommentGroupId(Long commentGroupId) {
+		this.commentGroupId = commentGroupId;
+	}
+
+	@PostPersist
+	public void postPersist() {
+		if (commentGroupId == null) {
+			commentGroupId = id;
+		}
 	}
 }
