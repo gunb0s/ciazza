@@ -4,6 +4,7 @@ import gunb0s.toy.ciazza.lecture.controller.dto.CreateLectureDto;
 import gunb0s.toy.ciazza.lecture.controller.dto.EnrollLectureDto;
 import gunb0s.toy.ciazza.lecture.controller.dto.GetLectureDto;
 import gunb0s.toy.ciazza.lecture.controller.dto.LectureSearchCondition;
+import gunb0s.toy.ciazza.lecture.controller.dto.LectureWithBoardDto;
 import gunb0s.toy.ciazza.lecture.entity.Lecture;
 import gunb0s.toy.ciazza.lecture.service.LectureService;
 import jakarta.validation.Valid;
@@ -35,5 +36,11 @@ public class LectureController {
 	public Page<GetLectureDto> getList(LectureSearchCondition lectureSearchCondition, Pageable pageable) {
 		Page<Lecture> lectures = lectureService.getList(lectureSearchCondition, pageable);
 		return lectures.map(GetLectureDto::new);
+	}
+
+	@GetMapping("/lecture/{lectureId}")
+	public LectureWithBoardDto get(@PathVariable Long lectureId) {
+		Lecture lecture = lectureService.get(lectureId);
+		return new LectureWithBoardDto(lecture);
 	}
 }

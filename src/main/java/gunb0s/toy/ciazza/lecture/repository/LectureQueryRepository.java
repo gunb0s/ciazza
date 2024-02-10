@@ -6,5 +6,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface LectureQueryRepository {
-	Page<Lecture> findLectureByLectureSearchCondition(LectureSearchCondition lectureSearchCondition, Pageable pageable);
+	Page<Lecture> findAllBySearchCondition(LectureSearchCondition lectureSearchCondition, Pageable pageable);
 }

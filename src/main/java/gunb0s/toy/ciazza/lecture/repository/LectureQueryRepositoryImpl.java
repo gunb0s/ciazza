@@ -26,7 +26,7 @@ public class LectureQueryRepositoryImpl implements LectureQueryRepository {
 	}
 
 	@Override
-	public Page<Lecture> findLectureByLectureSearchCondition(LectureSearchCondition lectureSearchCondition, Pageable pageable) {
+	public Page<Lecture> findAllBySearchCondition(LectureSearchCondition lectureSearchCondition, Pageable pageable) {
 		List<Lecture> results = queryFactory
 				.selectFrom(lecture)
 				.join(lecture.educator, educator)

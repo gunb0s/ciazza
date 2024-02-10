@@ -68,6 +68,10 @@ public class LectureService {
 	}
 
 	public Page<Lecture> getList(LectureSearchCondition lectureSearchCondition, Pageable pageable) {
-		return lectureQueryRepository.findLectureByLectureSearchCondition(lectureSearchCondition, pageable);
+		return lectureQueryRepository.findAllBySearchCondition(lectureSearchCondition, pageable);
+	}
+
+	public Lecture get(Long lectureId) {
+		return lectureRepository.findByIdWitEducator(lectureId).orElseThrow();
 	}
 }
