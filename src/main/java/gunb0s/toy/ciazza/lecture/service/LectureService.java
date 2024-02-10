@@ -4,13 +4,17 @@ import gunb0s.toy.ciazza.enrollment.entity.Enrollment;
 import gunb0s.toy.ciazza.enrollment.repository.EnrollmentRepository;
 import gunb0s.toy.ciazza.lecture.controller.dto.CreateLectureDto;
 import gunb0s.toy.ciazza.lecture.controller.dto.EnrollLectureDto;
+import gunb0s.toy.ciazza.lecture.controller.dto.LectureSearchCondition;
 import gunb0s.toy.ciazza.lecture.entity.Lecture;
+import gunb0s.toy.ciazza.lecture.repository.LectureQueryRepository;
 import gunb0s.toy.ciazza.lecture.repository.LectureRepository;
 import gunb0s.toy.ciazza.user.entity.Educator;
 import gunb0s.toy.ciazza.user.entity.Student;
 import gunb0s.toy.ciazza.user.repository.EducatorRepository;
 import gunb0s.toy.ciazza.user.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ import java.util.Random;
 @Transactional(readOnly = true)
 public class LectureService {
 	private final LectureRepository lectureRepository;
+	private final LectureQueryRepository lectureQueryRepository;
 	private final EducatorRepository educatorRepository;
 	private final StudentRepository studentRepository;
 	private final EnrollmentRepository enrollmentRepository;
@@ -60,5 +65,9 @@ public class LectureService {
 
 		enrollmentRepository.save(enrollment);
 		return enrollment.getId();
+	}
+
+	public Page<Lecture> getList(LectureSearchCondition lectureSearchCondition, Pageable pageable) {
+		return lectureQueryRepository.findLectureByLectureSearchCondition(lectureSearchCondition, pageable);
 	}
 }
