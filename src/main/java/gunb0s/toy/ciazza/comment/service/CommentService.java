@@ -30,6 +30,9 @@ public class CommentService {
 	public Long create(CreateCommentDto createCommentDto) {
 		User user = userRepository.findById(createCommentDto.getUserId()).orElseThrow();
 		Post post = postRepository.findPostWithLecture(createCommentDto.getPostId()).orElseThrow();
+		Comment parentComment = createCommentDto.getParentCommentId() == null
+				? null
+				: commentRepository.findById(createCommentDto.getParentCommentId()).orElseThrow();
 		Lecture lecture = post.getBoard().getLecture();
 
 		if (user.getDtype().equals("E")) {
@@ -38,11 +41,7 @@ public class CommentService {
 			enrollmentRepository.findByStudentAndLecture((Student) user, lecture).orElseThrow();
 		}
 
-		Comment comment = Comment.builder()
-				.content(createCommentDto.getContent())
-				.post(post)
-				.user(user)
-				.build();
+		Comment comment = new Comment(createCommentDto.getContent(), post, user, parentComment);
 
 		commentRepository.save(comment);
 		return comment.getId();

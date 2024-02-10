@@ -13,4 +13,6 @@ public class CreateCommentDto {
 
 	@NotNull
 	private Long userId;
+
+	private Long parentCommentId;
 }

@@ -3,7 +3,8 @@ POST http://localhost:8080/comment
 Content-Type: application/json
 
 {
-  "content": "hello content",
+  "content": "hello 204",
   "userId": 2,
-  "postId": 102
+  "postId": 102,
+  "parentCommentId": 204
 }

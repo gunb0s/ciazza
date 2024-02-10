@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,10 +44,10 @@ public class Comment extends BaseEntity {
 	@OneToMany(mappedBy = "parentComment")
 	private List<Comment> childComments = new ArrayList<>();
 
-	@Builder
-	public Comment(String content, Post post, User user) {
+	public Comment(String content, Post post, User user, Comment parentComment) {
 		this.content = content;
 		this.post = post;
 		this.user = user;
+		this.parentComment = parentComment;
 	}
 }
