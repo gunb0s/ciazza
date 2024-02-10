@@ -49,6 +49,10 @@ public class LectureService {
 		Lecture lecture = lectureRepository.findById(lectureId).orElseThrow();
 		Student student = studentRepository.findById(enrollLectureDto.getStudentId()).orElseThrow();
 
+		if (!lecture.getRegistrationCode().equals(enrollLectureDto.getRegistrationCode())) {
+			throw new IllegalArgumentException("Invalid registration code");
+		}
+
 		Enrollment enrollment = Enrollment.builder()
 				.lecture(lecture)
 				.student(student)
