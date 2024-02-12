@@ -37,4 +37,8 @@ public class BoardService {
 		boardRepository.save(board);
 		return board.getId();
 	}
+
+	public Board get(Long boardId) {
+		return boardRepository.findById(boardId).orElseThrow();
+	}
 }
