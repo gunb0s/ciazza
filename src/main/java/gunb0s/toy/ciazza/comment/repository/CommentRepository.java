@@ -14,5 +14,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	@Modifying
 	@Query("update Comment c set c.commentOrder = c.commentOrder + 1 where c.commentGroupId = :commentGroupId and c.commentOrder >= :order")
-	public Integer updateCommentOrderWithinCommentGroup(Long commentGroupId, Integer order);
+	public Integer updateCommentOrderGoeThanOrder(Long commentGroupId, Integer order);
 }

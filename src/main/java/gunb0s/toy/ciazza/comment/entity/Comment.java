@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PostPersist;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,7 +50,7 @@ public class Comment extends BaseEntity {
 
 	@Column(name = "comment_order")
 	private Integer commentOrder;
-	
+
 	private Integer depth;
 
 	@Builder
@@ -65,14 +64,22 @@ public class Comment extends BaseEntity {
 		this.depth = depth;
 	}
 
+	static public Comment createRootComment(String content, Post post, User user) {
+		return Comment.builder()
+				.content(content)
+				.post(post)
+				.user(user)
+				.commentOrder(0)
+				.depth(0)
+				.commentGroupId(null)
+				.build();
+	}
+
 	public void setCommentGroupId(Long commentGroupId) {
 		this.commentGroupId = commentGroupId;
 	}
 
-	@PostPersist
-	public void postPersist() {
-		if (commentGroupId == null) {
-			commentGroupId = id;
-		}
+	public Boolean isRootComment() {
+		return depth == 0;
 	}
 }

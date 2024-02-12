@@ -15,4 +15,8 @@ public class CreateCommentDto {
 	private Long userId;
 
 	private Long parentCommentId;
+
+	public Boolean isRootCommentRequest() {
+		return parentCommentId == null;
+	}
 }
