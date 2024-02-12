@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+	@Query("select p from Post p join fetch p.user where p.id = :postId")
+	Optional<Post> findByIdWithUser(Long postId);
+
 	@Query("select p from Post p join fetch p.board where p.id = :postId")
-	Optional<Post> findPostWithLecture(Long postId);
+	Optional<Post> findByIdWithBoard(Long postId);
 }

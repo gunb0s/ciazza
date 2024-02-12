@@ -1,4 +1,4 @@
-### Create Educator
+### Create Board
 POST http://localhost:8080/board
 Content-Type: application/json
 
