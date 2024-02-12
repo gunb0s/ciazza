@@ -1,6 +1,9 @@
 package gunb0s.toy.ciazza.user.service;
 
+import gunb0s.toy.ciazza.enrollment.entity.Enrollment;
+import gunb0s.toy.ciazza.enrollment.repository.EnrollmentQueryRepository;
 import gunb0s.toy.ciazza.user.controller.dto.CreateStudentDto;
+import gunb0s.toy.ciazza.user.controller.dto.StudentLectureSearchCondition;
 import gunb0s.toy.ciazza.user.entity.Student;
 import gunb0s.toy.ciazza.user.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class StudentService {
 	private final StudentRepository studentRepository;
+	private final EnrollmentQueryRepository enrollmentQueryRepository;
 
 	@Transactional
 	public Long create(CreateStudentDto createStudentDto) {
@@ -30,5 +34,9 @@ public class StudentService {
 
 	public Student get(Long id) {
 		return studentRepository.findById(id).orElseThrow();
+	}
+
+	public Page<Enrollment> getLectures(Long id, StudentLectureSearchCondition studentLectureSearchCondition, Pageable pageable) {
+		return enrollmentQueryRepository.searchEnrollment(id, studentLectureSearchCondition, pageable);
 	}
 }

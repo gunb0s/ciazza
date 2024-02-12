@@ -1,7 +1,10 @@
 package gunb0s.toy.ciazza.user.controller;
 
+import gunb0s.toy.ciazza.enrollment.entity.Enrollment;
 import gunb0s.toy.ciazza.user.controller.dto.CreateStudentDto;
 import gunb0s.toy.ciazza.user.controller.dto.GetStudentDto;
+import gunb0s.toy.ciazza.user.controller.dto.LectureDto;
+import gunb0s.toy.ciazza.user.controller.dto.StudentLectureSearchCondition;
 import gunb0s.toy.ciazza.user.entity.Student;
 import gunb0s.toy.ciazza.user.service.StudentService;
 import jakarta.validation.Valid;
@@ -37,5 +40,11 @@ public class StudentController {
 				.id(student.getId())
 				.name(student.getName())
 				.build();
+	}
+
+	@GetMapping("/student/{id}/lectures")
+	public Page<LectureDto> getLectures(@PathVariable Long id, StudentLectureSearchCondition studentLectureSearchCondition, Pageable pageable) {
+		Page<Enrollment> lectures = studentService.getLectures(id, studentLectureSearchCondition, pageable);
+		return lectures.map(LectureDto::new);
 	}
 }
