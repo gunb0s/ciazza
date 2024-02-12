@@ -48,7 +48,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 						contentContains(postSearchCondition.getContent()),
 						userEq(postSearchCondition.getUserId())
 				);
-		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchCount);
+		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
 	}
 
 	private BooleanExpression contentContains(String content) {

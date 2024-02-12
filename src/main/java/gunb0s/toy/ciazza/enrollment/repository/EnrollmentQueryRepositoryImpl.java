@@ -52,7 +52,7 @@ public class EnrollmentQueryRepositoryImpl implements EnrollmentQueryRepository 
 						semesterEq(studentLectureSearchCondition.getSemester()),
 						lectureCodeContains(studentLectureSearchCondition.getLectureCode())
 				);
-		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchCount);
+		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
 	}
 
 	private BooleanExpression semesterEq(Semester semester) {

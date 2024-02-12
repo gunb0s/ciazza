@@ -49,7 +49,7 @@ public class LectureQueryRepositoryImpl implements LectureQueryRepository {
 						lectureCodeContains(lectureSearchCondition.getLectureCode())
 				);
 
-		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchCount);
+		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
 	}
 
 	private BooleanExpression semesterEq(Semester semester) {

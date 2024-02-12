@@ -31,9 +31,11 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 				.limit(pageable.getPageSize())
 				.fetch();
 
-		JPAQuery<Comment> countQuery = queryFactory.selectFrom(comment)
+		JPAQuery<Long> countQuery = queryFactory
+				.select(comment.count())
+				.from(comment)
 				.where(comment.post.id.eq(postId));
 
-		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
+		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
 	}
 }
