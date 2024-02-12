@@ -1,4 +1,4 @@
-### Create Educator
+### Create Post
 POST http://localhost:8080/post
 Content-Type: application/json
 
@@ -9,3 +9,11 @@ Content-Type: application/json
   "userId": 1,
   "lectureId": 1
 }
+
+### Get Post Detail
+GET http://localhost:8080/post/1
+
+### Get Post List
+GET http://localhost:8080/post?title=hslo&lectureId=1
+Content-Type: application/json
+
