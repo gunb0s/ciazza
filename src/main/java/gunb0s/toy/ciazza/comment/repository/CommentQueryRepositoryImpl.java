@@ -38,4 +38,20 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 
 		return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
 	}
+
+	@Override
+	public Page<Comment> findUserComments(Long userId, Pageable pageable) {
+		List<Comment> results = queryFactory
+				.selectFrom(comment)
+				.join(comment.user, user).fetchJoin()
+				.where(comment.user.id.eq(userId))
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetch();
+
+		JPAQuery<Long> countQuery = queryFactory
+				.select(comment.count())
+				.where(comment.user.id.eq(userId));
+		return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
+	}
 }

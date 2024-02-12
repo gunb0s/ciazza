@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommentQueryRepository {
 	public Page<Comment> findAllCommentsOfPost(Long postId, Pageable pageable);
+
+	public Page<Comment> findUserComments(Long userId, Pageable pageable);
 }
