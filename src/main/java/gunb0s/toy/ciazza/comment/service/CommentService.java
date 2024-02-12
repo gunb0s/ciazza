@@ -66,6 +66,16 @@ public class CommentService {
 		}
 	}
 
+	public Page<Comment> getCommentOfPost(GetCommentOfPostDto getCommentOfPostDto, Pageable pageable) {
+		Long postId = getCommentOfPostDto.getPostId();
+		boolean exists = postRepository.existsById(postId);
+		if (!exists) {
+			throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+		}
+
+		return commentQueryRepository.findAllCommentsOfPost(postId, pageable);
+	}
+
 	private boolean isFirstCommentOfParent(Integer maxCommentOrderInParent) {
 		return maxCommentOrderInParent == null;
 	}
@@ -96,16 +106,6 @@ public class CommentService {
 				.build();
 
 		return commentRepository.save(comment).getId();
-	}
-
-	public Page<Comment> getCommentOfPost(GetCommentOfPostDto getCommentOfPostDto, Pageable pageable) {
-		Long postId = getCommentOfPostDto.getPostId();
-		boolean exists = postRepository.existsById(postId);
-		if (!exists) {
-			throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
-		}
-
-		return commentQueryRepository.findAllCommentsOfPost(postId, pageable);
 	}
 
 	private Long saveFirstCommentOfRoot(CreateCommentDto createCommentDto, Comment parentComment, Post post, User user, Integer parentCommentDepth) {
