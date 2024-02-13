@@ -12,15 +12,20 @@ import gunb0s.toy.ciazza.user.entity.Student;
 import gunb0s.toy.ciazza.user.entity.User;
 import gunb0s.toy.ciazza.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 @SpringBootTest
 @Transactional
 class WeirdProxyBehaviorTest {
@@ -67,6 +72,22 @@ class WeirdProxyBehaviorTest {
 		assertThatNoException().isThrownBy(() -> {
 			enrollmentRepository.findByStudentAndLecture((Student) user, lecture).orElseThrow();
 		});
+	}
+
+	@Test
+	void pureJPAReturnsHibernateProxy() {
+		Post post = em.createQuery("select p from Post p join fetch p.board where p.id = :postId", Post.class)
+				.setParameter("postId", postId)
+				.getSingleResult();
+
+		User user = em.find(User.class, studentId, Collections.emptyMap());
+		log.info("user class: {}", user.getClass());
+	}
+
+	@Test
+	void pureJPAReturnsNormalEntity() {
+		User user = em.find(User.class, studentId, Collections.emptyMap());
+		log.info("user class: {}", user.getClass());
 	}
 
 	private void setUpForCreatingComment() {
