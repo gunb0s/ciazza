@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -45,23 +46,39 @@ public class StudentController {
 				.body(new CreateStudentReposeDto(id));
 	}
 
+	@Operation(summary = "get student", description = "get student with pagination", tags = {"student"})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successful operation", useReturnTypeSchema = true),
+	})
 	@GetMapping("/student")
-	public Page<GetStudentDto> getList(Pageable pageable) {
+	public ResponseEntity<Page<GetStudentDto>> getList(@ParameterObject Pageable pageable) {
 		Page<Student> students = studentService.getList(pageable);
-		return students.map(GetStudentDto::new);
+		Page<GetStudentDto> studentDtoPage = students.map(GetStudentDto::new);
+		return ResponseEntity
+				.ok(studentDtoPage);
 	}
 
+	@Operation(summary = "get student detail", description = "get student by id", tags = {"student"})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successful operation", useReturnTypeSchema = true),
+	})
 	@GetMapping("/student/{id}")
-	public GetStudentDto get(@PathVariable Long id) {
+	public ResponseEntity<GetStudentDto> get(@PathVariable Long id) {
 		Student student = studentService.get(id);
-		return GetStudentDto.builder()
-				.id(student.getId())
-				.name(student.getName())
-				.build();
+		return ResponseEntity
+				.ok(new GetStudentDto(student));
 	}
 
+	@Operation(summary = "get student lectures", description = "get student lectures with pagination", tags = {"student"})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successful operation", useReturnTypeSchema = true),
+	})
 	@GetMapping("/student/{id}/lectures")
-	public Page<LectureDto> getLectures(@PathVariable Long id, StudentLectureSearchCondition studentLectureSearchCondition, Pageable pageable) {
+	public Page<LectureDto> getLectures(
+			@PathVariable Long id,
+			@ParameterObject StudentLectureSearchCondition studentLectureSearchCondition,
+			@ParameterObject Pageable pageable
+	) {
 		Page<Enrollment> lectures = studentService.getLectures(id, studentLectureSearchCondition, pageable);
 		return lectures.map(LectureDto::new);
 	}
