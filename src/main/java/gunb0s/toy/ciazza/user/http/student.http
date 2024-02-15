@@ -3,14 +3,14 @@ POST http://localhost:8080/student
 Content-Type: application/json
 
 {
-  "name": "cha hae in"
+  "name": "choi jong in"
 }
 
 ### Get Student List
 GET http://localhost:8080/student?size=2&page=1
 
 ### Get Student
-GET http://localhost:8080/student/2
+GET http://localhost:8080/student/3
 
 ### Get Lecture of student
-GET http://localhost:8080/student/1/lectures?semester=SPRING_2024
+GET http://localhost:8080/student/3/lectures?semester=SPRING_2024
