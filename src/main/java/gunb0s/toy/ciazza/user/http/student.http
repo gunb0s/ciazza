@@ -10,7 +10,7 @@ Content-Type: application/json
 GET http://localhost:8080/student?size=2&page=1
 
 ### Get Student
-GET http://localhost:8080/student/3
+GET http://localhost:8080/student/1
 
 ### Get Lecture of student
 GET http://localhost:8080/student/3/lectures?semester=SPRING_2024
